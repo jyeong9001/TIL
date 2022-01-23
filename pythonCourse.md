@@ -58,3 +58,43 @@ hello = say_hello (age="12", name="nico") 로 표기 가능하다. argument가 �
 
 beautifulsoup은 html에서 정보를 추출하기에 유용한 package이다.
 먼저 package에서 requests와 beautifulsoup4를 install 받는다.
+
+# Flask
+
+Flask는 Python의 마이크로 웹 프레임워크이다. 다양한 웹 엔진과 붙여서 쓸 수 있고 또 가볍기도 해서 Django와 같이 쓰는 경우도 있다. 코드도 비교적 단순하고, 특히 API 서버를 만들기에 매우 편리하다. 관련된 확장 기능들이 많기 때문이다.
+
+```py
+from flask import Flask, render_template, request, redirect
+
+app = Flask("SuperScrapper")
+
+@app.route("/")
+def home():
+  return render_template("home.html")
+
+@app.route("/<username>")
+def potato(username):
+  return f"Contact me {username}"
+
+@app.route("/report")
+def report():
+  word = request.args.get("word")
+  if word:
+    word = word.lower()
+  else:
+    return redirect("/")
+  # return f"Hello {word}"
+  return render_template("report.html", searching=word)
+
+app.run(host="0.0.0.0")
+```
+
+- @는 decorator로 바로 아래에 있는 함수를 찾아 접속 요청이 들어옴과 동시에 함수를 실행한다.
+
+- dynamic urls: <something> placeholder를 넣어서 함수의 argument로 사용될 수 있다.
+
+- flask의 render_template은 html file을 가져올 수 있다. 이 때 render_template 이라는 함수가 argument로 templates를 받기 때문에 potato.html가 저장되는 폴더 이름도 templates여야 한다.
+
+- request를 통해 사용자가 입력한 정보를 가져올 수 있다.
+
+- request.args.get("word")는 query arguments로 url 마지막 부분에 "https://python-course.jyeong9001.repl.co/report?word=python" 와 같이 정보를 가져올 수 있는 방법을 말한다.
